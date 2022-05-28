@@ -1,20 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-export default function App() {
+
+import tela_inicial from './tela_inicial';
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function Tabs({ route }) {
+  const { contactsListRef } = route.params;
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <Tab.Navigator>
+      <Tab.Screen
+        options={{
+          title: 'Tela Inicial',
+          tabBarIcon:  ({ color, size}) => <Ionicons name="home-outline" size={size} color={color} />
+        }}
+        name="tela_inicial"
+        component={tela_inicial}
+      />
+    </Tab.Navigator>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  const contactsListRef = useRef([]);
+
+  useEffect(() => {
+    ContactRepository.getAll().then((rows) => contactsListRef.current = rows)
+  }, []);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        
+
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
